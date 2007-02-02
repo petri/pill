@@ -21,7 +21,7 @@ def adduser(username, password, emailaddress, fullname=None, mail_me=0):
    "add an user"
    go("/join_form")
    fullname = fullname or username
-   formvalue(2, "fullname" fullname)
+   formvalue(2, "fullname", fullname)
    formvalue(2, "username", username)
    formvalue(2, "email", emailaddress)
    formvalue(2, "password", password)
@@ -48,3 +48,8 @@ def allowmanualpassword():
    formvalue(1,"validate_email",0)
    submit
 
+def delpropsheet(sheetname):
+   "remove a property sheet"
+   go("/portal_properties/manage_main")
+   formvalue(2,"ids:list", sheetname)
+   submit(5)
