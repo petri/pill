@@ -5,56 +5,8 @@ from ConfigParser import SafeConfigParser as ConfigParser
 from twill.commands import *
 from twill.namespaces import get_twill_glocals
 
+from util import *
 
-CONFIG = "config.ini"
-parser = ConfigParser()
-
-try:
-   parser.read(CONFIG)
-except:
-   pass
-
-
-@contextmanager
-def sitecontext():
-   "set the site context"
-   global parser
-   g = globals()
-   tg, tl = get_twill_glocals()
-   g.update(tg)
-   yield
-   for k in tg:
-      del g[k]
-
-
-def silentfailure(func):
-
-   def wrapper(*args, **kwargs):
-      if "silent" in args:
-        try:
-           return func(*args, **kwargs)
-        except:
-           pass
-      else:
-         return func(*args, **kwargs)
-
-   return wrapper
-
-
-def load(filename=CONFIG):
-   global parser
-   parser.read(filename)
-
-   
-def restart():
-   "restart a zope server"
-   global parser
-   with sitecontext():
-      add_auth("Zope", "http://" + root, "admin", parser.get(domain,"admin"))
-      go("http://" + root + "/Control_Panel/manage_main")
-      submit(1)
-
-   
 
 def login(username):
    "login to a plone site"
@@ -99,19 +51,20 @@ def uninstall(productstring):
    submit()
 
 
-@silentfailure
-def allowmanualpassword():
-   go("/reconfig_form")
-   formvalue(1,"validate_email",0)
-   submit
+class config:
 
-
-@silentfailure
-def delete(path):
-   "delete an object"
-   container = '/'.join(path.split('/')[:-1])
-   go(container + "/folder_contents")
-   formvalue(2, "paths:list", path.split('/')[-1])
+   def __init__(self, method, param):
+      getattr(self, method)(param)
+      
+   @silentfailure
+   def setpassword(self,param):
+      go("/reconfig_form")
+      if param == "allow":
+         formvalue(2,"validate_email","0")
+      else:
+         formvalue(2, "validate_email", "1")
+         
+      submit()
 
 
 def delpropsheet(sheetname):
