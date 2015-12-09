@@ -1,39 +1,25 @@
-"""pill (and zill) - twill extensions for use with zope & plone
-"""
+from setuptools import setup, find_packages
+import sys, os
 
-classifiers = """\
-Development Status :: 3 - Alpha
-Programming Language :: Python
-Operating System :: MacOS :: MacOS X
-Operating System :: Microsoft :: Windows
-Operating System :: POSIX
-Topic :: Software Development :: Libraries :: Python Modules
-Topic :: Software Development :: Libraries
-Intended Audience :: Developers
-License :: OSI Approved :: GNU General Public License (GPL)
-"""
+version = '0.2'
 
-import sys
-from distutils.core import setup
-
-if sys.version_info < (2, 3):
-    _setup = setup
-    def setup(**kwargs):
-        if kwargs.has_key("classifiers"):
-            del kwargs["classifiers"]
-        _setup(**kwargs)
-
-doclines = __doc__.split("\n")
-
-setup(name="pill",
-      version="0.1",
-      maintainer="Petri Savolainen",
-      maintainer_email="petri.savolainen@iki.fi",
-      platforms = ["win32", "unix"],
-      packages = ["pill"],
-      package_dir = {"pill": "lib"},
-      scripts=['scripts/demo.tw',],
-      description = doclines[0],
-      classifiers = filter(None, classifiers.split("\n")),
-      long_description = "\n".join(doclines[2:]),
-)
+setup(name='pill',
+      version=version,
+      description="Plonish extensions to Twill",
+      long_description="added verbs",
+      classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      keywords='twill testing plone zope',
+      author='Petri Savolainen',
+      author_email='petri.savolainen@iki.fi',
+      url='',
+      license='GPL',
+      packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
+      include_package_data=True,
+      zip_safe=False,
+      install_requires=[
+          # -*- Extra requirements: -*-
+      ],
+      entry_points="""
+      # -*- Entry points: -*-
+      """,
+      )
